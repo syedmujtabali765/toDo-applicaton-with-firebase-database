@@ -1,40 +1,57 @@
-var todoItems = document.getElementById('todo-items');
-var addItems = document.getElementById('add-items');
-var deleteAll = document.getElementById('Delete-all');
-var list = document.getElementById('list');
+const todoItems = document.getElementById('todo-items');
+const addItems = document.getElementById('add-items');
+const deleteAll = document.getElementById('Delete-all');
+const list = document.getElementById('list');
+const database = firebase.database().ref('todos');
 
-function addtask() {
+database.on('child_added', data => {
+    const todoText = document.createTextNode(data.val().value);
+    const li = document.createElement('li');
+    const deleteBtn = document.createElement("button");
+    const delBtnText = document.createTextNode("DELETE");
+    const editBtn = document.createElement("button");
+    const editBtnText = document.createTextNode("EDIT");
+    deleteBtn.setAttribute("onclick", "deleteli(this)");
+    deleteBtn.setAttribute("id", data.val().key);
+    deleteBtn.setAttribute("class", "delete-btn");
+    editBtn.setAttribute("class", "Edit-btn");
+    editBtn.setAttribute("onclick", "edit(this)");
+    editBtn.setAttribute("id", data.val().key);
+    deleteBtn.appendChild(delBtnText);
+    editBtn.appendChild(editBtnText);
+    li.appendChild(todoText);
+    li.appendChild(deleteBtn);
+    li.appendChild(editBtn);
+    list.appendChild(li);
+})
+
+const addtask = () => {
     if (todoItems.value.trim()) {
-        var todoText = document.createTextNode(todoItems.value);
-        var li = document.createElement('li');
-        var deleteBtn = document.createElement("button");
-        var delBtnText = document.createTextNode("DELETE");
-        var editBtn = document.createElement("button");
-        var editBtnText = document.createTextNode("EDIT");
-        deleteBtn.setAttribute("onclick", "deleteli(this)");
-        deleteBtn.setAttribute("class", "delete-btn");
-        editBtn.setAttribute("class", "Edit-btn");
-        editBtn.setAttribute("onclick", "edit(this)");
-        deleteBtn.appendChild(delBtnText);
-        editBtn.appendChild(editBtnText);
-        li.appendChild(todoText);
-        li.appendChild(deleteBtn);
-        li.appendChild(editBtn);
-        list.appendChild(li);
+        const key = database.push().key;
+        let todo = {
+            value: todoItems.value,
+            key: key
+        }
+        database.child(key).set(todo);
         todoItems.value = "";
     }
-
 }
 
-function deleteli(a) {
+const deleteli = (a) => {
+    database.child(a.id).remove();
     a.parentNode.remove();
 }
 
-function deleteall() {
+const deleteall = () => {
+    database.remove();
     list.innerHTML = "";
 }
 
-function edit(b) {
-    var editVal = prompt("Enter Edit value", b.parentNode.firstChild.nodeValue);
+const edit = (b) => {
+    const editVal = prompt("Enter Edit value", b.parentNode.firstChild.nodeValue);
+    let val = {
+        value: editVal,
+        key: b.id
+    }
     b.parentNode.firstChild.nodeValue = editVal;
 }

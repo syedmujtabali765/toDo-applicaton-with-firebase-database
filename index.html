@@ -6,6 +6,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>T0d0 APP</title>
     <link rel="stylesheet" href="style.css">
+    <script src="https://www.gstatic.com/firebasejs/8.0.2/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.0.2/firebase-database.js"></script>
+    <script>
+        var firebaseConfig = {
+            apiKey: "AIzaSyCFKsY0-Qv51oNzlroI-B9yAuYRD0AXt9c",
+            authDomain: "todo-mujtaba.firebaseapp.com",
+            databaseURL: "https://todo-mujtaba.firebaseio.com",
+            projectId: "todo-mujtaba",
+            storageBucket: "todo-mujtaba.appspot.com",
+            messagingSenderId: "663205561402",
+            appId: "1:663205561402:web:2446b2a3e5a9f5a00ce103"
+        };
+        firebase.initializeApp(firebaseConfig);
+    </script>
 </head>
 
 <body>
@@ -17,7 +31,7 @@
     <div>
         <ul id="list"></ul>
     </div>
-    <script src="app.js" defer></script>
+    <script src="app.js"></script>
 </body>
 
 </html>
